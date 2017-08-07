@@ -1,0 +1,1 @@
+net = feedforwardnet([21 17 21]);

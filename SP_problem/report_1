@@ -1,0 +1,35 @@
+RUN 			:	1
+noise free samples	:	20000
+scaled noise samples	:	20000 (2.5)
+epochs			:	16
+error 			:	90.853
+max error 		:	2.49e+6
+hidden layers 		:	17
+-------------------------------------------------
+
+RUN 			:	2
+noise free samples	:	20000
+scaled noise samples	:	20000 (2.5)
+epochs			:	20
+error 			:	78.8
+max error 		:	3.23e+6
+hidden layers 		:	17 12 17
+-------------------------------------------------
+
+RUN 			:	3
+noise free samples	:	20000
+scaled noise samples	:	20000 (2.5)
+epochs			:	21
+error 			:	313
+max error 		:	2.06e+6
+hidden layers 		:	17 12 8 12 17
+-------------------------------------------------
+
+RUN 			:	3
+noise free samples	:	20000
+scaled noise samples	:	20000 (2.5)
+epochs			:	100
+error 			:	62.5
+max error 		:	3.74e+6
+hidden layers 		:	28
+------------------------------------------------

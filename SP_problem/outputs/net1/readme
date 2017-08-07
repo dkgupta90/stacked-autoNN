@@ -1,0 +1,6 @@
+generated with 80000 samples with 70000 constant noise of 50% in 50% of the sample units. NO regularization was used and a hidden layer of 25 units was used with {sigmoid, linear} activations.
+
+snet: deepnet
+17 20 25 20 17
+2 2 2 2 2 1
+0.05 0.05 1

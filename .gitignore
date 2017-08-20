@@ -1,4 +1,3 @@
-outputs/*
-train_data/*
 *.dat
 *.mat
+

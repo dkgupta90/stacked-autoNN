@@ -13,51 +13,58 @@ Vph = 3700;
 Vpw = 1500;
 
 %% Parameter range for generating synthetic data
-Sh = [0; 0.4];
-Vsh = [0.3; 0.7];
-%porosity = 0.7 .* ones(size(porosity));
-Csand = (1 - porosity) .* (1 - Vsh);
-Cclay = (1 - porosity) .* Vsh;
-%Chydrate = porosity1 .* Sh1;
-%Cwater = porosity1 .* (1 - Sh1);
+Sh = [0; 0.2];
+Vsh = [0.5; 0.8];
+porosity = [0.3; 0.6];
 
 %% weighted euqation parameters
-W = 0.8;
-n = 10;
+W = 0.9;
+n = 2;
 
-Sh_cal = zeros(size(depth)); % calculated saturation log
-Vp_cal = zeros(size(depth));
-for i = 1:1:length(depth)
-   error = 1e9;
-   for S = 0:0.01:1
-       Chyd = porosity(i) .* S;
-       Cwater = porosity(i) .* (1 - S);
-       Vnew = get_weighted_Vp(W, n, density(i), ...
-       rhoSand, Vpsand, Csand(i),...
-       rhoClay, Vpclay, Cclay(i), ...
-       rhoW, Vpw, Cwater, ...
-       rhoH, Vph, Chyd,...
-       porosity(i), S);
-       if (abs(Vnew - Vp(i)) < error)
-           Vp_cal(i) = Vnew;
-           Sh_cal(i) = S;
-           error = abs(Vnew - Vp(i));
-       end
-   end
-end
+%% Generate random Sh and Vsh logs
+
+depth = 0.1:0.1:100;
+no_samples = length(depth); % no of random samples
+
+Sh_log = generate_log(Sh, no_samples);
+Vsh_log = generate_log(Vsh, no_samples);
+porosity_log = generate_log(porosity, no_samples);
+
+Csand = (1 - porosity_log) .* (1 - Vsh_log);
+Cclay = (1 - porosity_log) .* Vsh_log;
+Chydrate = porosity_log .* Sh_log;
+Cwater = porosity_log .* (1 - Sh_log);
+
+density_log = get_bulk_density(rhoSand, Csand,...
+       rhoClay, Cclay, ...
+       rhoW, Cwater, ...
+       rhoH, Chydrate);
+
+
+Vp_log = get_weighted_Vp(W, n, density_log, ...
+rhoSand, Vpsand, Csand,...
+rhoClay, Vpclay, Cclay, ...
+rhoW, Vpw, Cwater, ...
+rhoH, Vph, Chydrate,...
+porosity_log, Sh_log);
+
+maxden = max(density_log)
+minden = min(density_log)
+maxVp = max(Vp_log)
+minVp = min(Vp_log)
    
    
    
 % plotting the logsuite
-plot_logsuite(depth, density, porosity, Vsh, Vp, Vp_cal, Sh_cal);
+plot_logsuite(depth, density_log, porosity_log, Vsh_log, Vp_log, Vp_log, Sh_log);
 
 
 temp(:, 1) = depth;
-temp(:, 2) = density;
-temp(:, 3) = porosity; %0.4 .* ones(size(density));
-temp(:, 4) = Vsh;
-temp(:, 5) = Vp;
-temp(:, 6) = Vp_cal;
-temp(:, 7) = Sh_cal;
-save('../../data/final_synthetic01.dat', 'temp', '-ascii');
+temp(:, 2) = density_log;
+temp(:, 3) = porosity_log; %0.4 .* ones(size(density));
+temp(:, 4) = Vsh_log;
+temp(:, 5) = Vp_log;
+temp(:, 6) = Vp_log;
+temp(:, 7) = Sh_log;
+save('../data/final_synthetic02.dat', 'temp', '-ascii');
 
